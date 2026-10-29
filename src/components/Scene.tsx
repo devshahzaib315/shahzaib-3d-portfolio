@@ -7,12 +7,13 @@ import * as THREE from 'three'
 function OrbitalCharacter() {
   const group = useRef<THREE.Group>(null!)
   const head = useRef<THREE.Mesh>(null!)
-  useFrame(({ pointer, clock }) => {
+  useFrame(({ pointer, clock }, delta) => {
     const t = clock.elapsedTime
-    group.current.rotation.y = THREE.MathUtils.lerp(group.current.rotation.y, pointer.x * .25 + Math.sin(t * .28) * .12, .035)
-    group.current.rotation.x = THREE.MathUtils.lerp(group.current.rotation.x, -pointer.y * .14, .035)
+    const speed = 60 // higher = faster follow
+    group.current.rotation.y = THREE.MathUtils.damp(group.current.rotation.y, pointer.x * .7 + Math.sin(t * .28) * .08, speed, delta)
+    group.current.rotation.x = THREE.MathUtils.damp(group.current.rotation.x, -pointer.y * .4, speed, delta)
     group.current.position.y = Math.sin(t * .8) * .12
-    if (head.current) head.current.rotation.y = pointer.x * .13
+    if (head.current) head.current.rotation.y = THREE.MathUtils.damp(head.current.rotation.y, pointer.x * .45, speed + 8, delta)
   })
   return <group ref={group}>
     <Float speed={1.4} rotationIntensity={.18} floatIntensity={.35}>
