@@ -29,15 +29,37 @@ function Loader({ done }: { done: () => void }) {
   return <div className="loader"><div className="loader-mark"><img src="/logo.svg" alt="Shahzaib logo" /></div><div className="loader-bottom"><span>DESIGNING THE DIGITAL</span><span>LOADING EXPERIENCE <i /></span></div><div className="loader-line"><i /></div></div>
 }
 function Cursor() {
-  const ref = useRef<HTMLDivElement>(null)
+  const dot = useRef<HTMLDivElement>(null)
+  const ring = useRef<HTMLDivElement>(null)
   useEffect(() => {
-    if (window.matchMedia('(pointer: coarse)').matches) return
-    const move = (e: MouseEvent) => { gsap.to(ref.current, { x: e.clientX, y: e.clientY, duration: .24, ease: 'power3.out' }) }
-    const over = (e: Event) => { const target = e.target as HTMLElement; if (target.closest('a,button,.project-card')) ref.current?.classList.add('cursor-active'); else ref.current?.classList.remove('cursor-active') }
+    if (window.matchMedia('(pointer: coarse)').matches || !dot.current || !ring.current) return
+    const d = dot.current, r = ring.current
+    document.documentElement.classList.add('has-custom-cursor')
+    gsap.set([d, r], { xPercent: -50, yPercent: -50 })
+    const dx = gsap.quickSetter(d, 'x', 'px'), dy = gsap.quickSetter(d, 'y', 'px')
+    const rx = gsap.quickTo(r, 'x', { duration: .3, ease: 'power3.out' }), ry = gsap.quickTo(r, 'y', { duration: .3, ease: 'power3.out' })
+    const move = (e: MouseEvent) => {
+      dx(e.clientX); dy(e.clientY); rx(e.clientX); ry(e.clientY)
+      d.classList.add('is-visible'); r.classList.add('is-visible')
+    }
+    const over = (e: Event) => {
+      const t = e.target as HTMLElement
+      r.classList.toggle('is-active', !!t.closest?.('a,button,.project-card,[role="button"]'))
+    }
+    const down = () => r.classList.add('is-down')
+    const up = () => r.classList.remove('is-down')
+    const leave = () => { d.classList.remove('is-visible'); r.classList.remove('is-visible') }
     window.addEventListener('mousemove', move); document.addEventListener('mouseover', over)
-    return () => { window.removeEventListener('mousemove', move); document.removeEventListener('mouseover', over) }
+    window.addEventListener('mousedown', down); window.addEventListener('mouseup', up)
+    document.documentElement.addEventListener('mouseleave', leave)
+    return () => {
+      document.documentElement.classList.remove('has-custom-cursor')
+      window.removeEventListener('mousemove', move); document.removeEventListener('mouseover', over)
+      window.removeEventListener('mousedown', down); window.removeEventListener('mouseup', up)
+      document.documentElement.removeEventListener('mouseleave', leave)
+    }
   }, [])
-  return <div ref={ref} className="custom-cursor" aria-hidden="true"><span /></div>
+  return <><div ref={ring} className="cursor-ring" aria-hidden="true" /><div ref={dot} className="cursor-dot" aria-hidden="true" /></>
 }
 function App() {
   const [loading, setLoading] = useState(true)
