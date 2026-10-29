@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { ArrowDownRight, ArrowRight, ArrowUpRight, Asterisk, Github, Instagram, Menu, MoveUpRight, Send, X } from 'lucide-react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -40,6 +40,38 @@ function InkCycle() {
     return () => { window.clearInterval(id); document.documentElement.style.removeProperty('--ink') }
   }, [])
   return null
+}
+
+const WHATSAPP = '923225083527'
+const CONTACT_EMAIL = 'btw.jutt.9@gmail.com'
+const categories = ['Website Development', 'React / Frontend App', '3D & Interactive Website', 'Python & Automation', 'AI Chatbot / WhatsApp Bot', 'UI/UX Design', 'SEO & Performance', 'Bug Fixing / Maintenance', 'Other']
+
+function ContactForm() {
+  const formRef = useRef<HTMLFormElement>(null)
+  const read = () => {
+    const f = new FormData(formRef.current!)
+    return { category: String(f.get('category') || '').trim(), name: String(f.get('name') || '').trim(), email: String(f.get('email') || '').trim(), message: String(f.get('message') || '').trim() }
+  }
+  const text = ({ category, name, email, message }: { category: string; name: string; email: string; message: string }) => `Hi Shahzaib, I'm ${name}.\nEmail: ${email}\nCategory: ${category}\n\n${message}`
+  const sendWhatsApp = (e: FormEvent) => {
+    e.preventDefault()
+    window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(text(read()))}`, '_blank', 'noopener,noreferrer')
+  }
+  const sendEmail = () => {
+    if (!formRef.current?.reportValidity()) return
+    const d = read()
+    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(`${d.category} — message from ${d.name}`)}&body=${encodeURIComponent(text(d))}`
+  }
+  return <form ref={formRef} className="contact-form" onSubmit={sendWhatsApp}>
+    <label><span>NAME</span><input name="name" type="text" placeholder="Your name" required autoComplete="name" /></label>
+    <label><span>EMAIL</span><input name="email" type="email" placeholder="you@example.com" required autoComplete="email" /></label>
+    <label><span>CATEGORY</span><select name="category" required defaultValue=""><option value="" disabled>Select a category</option>{categories.map((c) => <option key={c} value={c}>{c}</option>)}</select></label>
+    <label><span>MESSAGE</span><textarea name="message" rows={4} placeholder="Tell me about your project or idea..." required /></label>
+    <div className="form-actions">
+      <button type="submit" className="btn-primary">Send on WhatsApp <ArrowUpRight size={15}/></button>
+      <button type="button" className="btn-ghost" onClick={sendEmail}>Send via Email</button>
+    </div>
+  </form>
 }
 
 function Cursor() {
@@ -158,7 +190,7 @@ function App() {
 
         <section className="contact-section section-pad" id="contact">
           <div className="section-heading reveal"><span className="section-index">06 / YOUR TURN</span><span className="section-note">GOOD THINGS START WITH HELLO</span></div>
-          <div className="contact-layout"><div><p className="eyebrow reveal"><span className="status-dot"/> OPEN TO THE RIGHT OPPORTUNITY</p><h2 className="contact-title reveal">Have a good<br/>one in <em>mind?</em></h2><p className="contact-copy reveal">Have a project, an idea, or just want to say hello? My inbox is open.</p></div><div className="contact-action reveal"><a className="email-link" href="mailto:btw.jutt.9@gmail.com">Let’s make it real <ArrowUpRight /></a><div className="social-links"><a href="https://github.com/devshahzaib315" target="_blank" rel="noreferrer"><Github size={17}/> GitHub <ArrowUpRight size={13}/></a><a href="https://www.instagram.com/devshahzaib315/" target="_blank" rel="noreferrer"><Instagram size={17}/> Instagram <ArrowUpRight size={13}/></a><a href="https://t.me/devshahzaib315" target="_blank" rel="noreferrer"><Send size={16}/> Telegram <ArrowUpRight size={13}/></a></div></div></div>
+          <div className="contact-layout"><div><p className="eyebrow reveal"><span className="status-dot"/> OPEN TO THE RIGHT OPPORTUNITY</p><h2 className="contact-title reveal">Have a good<br/>one in <em>mind?</em></h2><p className="contact-copy reveal">Have a project, an idea, or just want to say hello? My inbox is open.</p></div><div className="contact-action reveal"><a className="email-link" href="mailto:btw.jutt.9@gmail.com">Let’s make it real <ArrowUpRight /></a><ContactForm /><div className="social-links"><a href="https://github.com/devshahzaib315" target="_blank" rel="noreferrer"><Github size={17}/> GitHub <ArrowUpRight size={13}/></a><a href="https://www.instagram.com/devshahzaib315/" target="_blank" rel="noreferrer"><Instagram size={17}/> Instagram <ArrowUpRight size={13}/></a><a href="https://t.me/devshahzaib315" target="_blank" rel="noreferrer"><Send size={16}/> Telegram <ArrowUpRight size={13}/></a></div></div></div>
           <footer className="footer"><a className="brand" href="#home" aria-label="Back to top"><img src="/logo.svg" alt="Shahzaib logo" /></a><span>DESIGNED WITH CURIOSITY · BUILT WITH CARE</span><a href="#home" className="back-top">BACK TO TOP <MoveUpRight size={13}/></a><span className="copyright">© SHAHZAIB 2026</span></footer>
         </section>
       </main>
