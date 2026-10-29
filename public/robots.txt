@@ -1,3 +1,0 @@
-User-agent: *
-Allow: /
-Sitemap: https://shahzaib315.site.je/sitemap.xml
