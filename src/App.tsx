@@ -32,7 +32,6 @@ const inkColors = ['#f4f0f7', '#ff6b6b', '#ff9f43', '#feca57', '#fbbf24', '#34d3
 
 function InkCycle() {
   useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
     let i = 0
     const id = window.setInterval(() => {
       i = (i + 1) % inkColors.length
