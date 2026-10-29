@@ -5,3 +5,4 @@
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}.custom-cursor{display:none}}
 
 .brand img{height:36px;width:auto;display:block}.footer .brand img{height:30px}.loader-mark{display:flex;align-items:center;justify-content:center}.loader-mark img{height:clamp(5rem,16vw,11rem);width:auto;display:block}@media(max-width:520px){.brand img{height:30px}}
+.rotating-word{display:inline-block;animation:wordIn .6s cubic-bezier(.22,1,.36,1) both}@keyframes wordIn{from{opacity:0;transform:translateY(.35em);filter:blur(6px)}to{opacity:1;transform:none;filter:blur(0)}}
