@@ -11,7 +11,7 @@ A responsive portfolio built with React, TypeScript, Vite, Three.js via React Th
 
 ## Before publishing
 
-- Confirm the canonical domain in `index.html` (`https://shahzaib315.site.je/`) is the domain you will use.
+- Confirm the canonical domain in `index.html` (`https://jutt-3d-portfolio.vercel.app/`) is the domain you will use.
 - Replace concept projects in `src/App.tsx` with real projects and working URLs.
 - Update contact email if it changes.
 - Deploy the generated `dist/` directory to Cloudflare Pages or Vercel. This is a Vite/React app, so deploy the built output rather than the source folder for static hosting.
