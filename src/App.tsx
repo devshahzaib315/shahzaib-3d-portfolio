@@ -11,6 +11,17 @@ const projects = [
   { n: '03', type: 'INTERACTIVE WEB', title: 'Orbit Finance', desc: 'A new way to make complex financial tools feel simple.', tags: ['React', 'Three.js', 'Data viz'], visual: 'orbit' },
   { n: '04', type: 'CREATIVE DEVELOPMENT', title: 'After Hours', desc: 'A digital playground for sound, culture, and community.', tags: ['WebGL', 'GSAP', 'Creative code'], visual: 'after' },
 ]
+const heroWords = ['feelings', 'dreams', 'worlds', 'magic', 'possibilities', 'interfaces', 'experiences', 'stories', 'ideas', 'moments']
+
+function RotatingWord() {
+  const [i, setI] = useState(0)
+  useEffect(() => {
+    const id = window.setInterval(() => setI((v) => (v + 1) % heroWords.length), 5000)
+    return () => window.clearInterval(id)
+  }, [])
+  return <em key={i} className="rotating-word" aria-live="polite">{heroWords[i]}.</em>
+}
+
 const tech = ['React', 'TypeScript', 'JavaScript', 'Three.js', 'GSAP', 'CSS / SCSS', 'Node.js', 'Git & GitHub']
 
 function Loader({ done }: { done: () => void }) {
@@ -70,7 +81,7 @@ function App() {
           <div className="hero-grid" />
           <div className="hero-copy">
             <p className="eyebrow"><span className="status-dot" /> AVAILABLE FOR SELECT PROJECTS <span className="eyebrow-year">— 2026</span></p>
-            <h1 id="hero-title">Building<br/>digital <em>feelings.</em></h1>
+            <h1 id="hero-title">Building<br/>digital <RotatingWord /></h1>
             <div className="hero-subrow"><p className="hero-sub">I’m Shahzaib — a frontend developer shaping thoughtful interfaces and immersive web experiences.</p><a className="round-link" href="#work" aria-label="Explore selected work"><ArrowDownRight /></a></div>
             <div className="hero-meta"><span>FRONTEND DEVELOPER</span><span>BASED IN PAKISTAN · WORKING WORLDWIDE</span></div>
           </div>
