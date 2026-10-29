@@ -16,7 +16,7 @@ const heroWords = ['feelings', 'dreams', 'worlds', 'magic', 'possibilities', 'in
 function RotatingWord() {
   const [i, setI] = useState(0)
   useEffect(() => {
-    const id = window.setInterval(() => setI((v) => (v + 1) % heroWords.length), 5000)
+    const id = window.setInterval(() => setI((v) => (v + 1) % heroWords.length), 2000)
     return () => window.clearInterval(id)
   }, [])
   return <em key={i} className="rotating-word" aria-live="polite">{heroWords[i]}.</em>
