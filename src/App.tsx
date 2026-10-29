@@ -28,6 +28,21 @@ function Loader({ done }: { done: () => void }) {
   useEffect(() => { const t = window.setTimeout(done, 1050); return () => window.clearTimeout(t) }, [done])
   return <div className="loader"><div className="loader-mark"><img src="/logo.svg" alt="Shahzaib logo" /></div><div className="loader-bottom"><span>DESIGNING THE DIGITAL</span><span>LOADING EXPERIENCE <i /></span></div><div className="loader-line"><i /></div></div>
 }
+const inkColors = ['#f4f0f7', '#ff6b6b', '#ff9f43', '#feca57', '#fbbf24', '#34d399', '#2dd4bf', '#22d3ee', '#48dbfb', '#60a5fa', '#a78bfa', '#c084fc', '#f472b6', '#fb7185', '#ffb4a2']
+
+function InkCycle() {
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    let i = 0
+    const id = window.setInterval(() => {
+      i = (i + 1) % inkColors.length
+      document.documentElement.style.setProperty('--ink', inkColors[i])
+    }, 2000)
+    return () => { window.clearInterval(id); document.documentElement.style.removeProperty('--ink') }
+  }, [])
+  return null
+}
+
 function Cursor() {
   const dot = useRef<HTMLDivElement>(null)
   const ring = useRef<HTMLDivElement>(null)
@@ -86,6 +101,7 @@ function App() {
   const closeMenu = () => setMenuOpen(false)
   return <>
     {loading && <Loader done={setDone} />}
+    <InkCycle />
     <Cursor />
     <div className={`site-shell ${loading ? 'is-loading' : ''}`}>
       <div className="scroll-progress" ref={progress} />
