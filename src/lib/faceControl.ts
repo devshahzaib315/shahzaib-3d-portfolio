@@ -16,6 +16,8 @@ let video: HTMLVideoElement | null = null
 let detector: any = null
 let raf = 0
 let running = false
+// neutral (resting) head pitch/position, learned from the first moments so up/down works for any phone angle
+let calib = { n: 0, pitch: 0, posY: 0 }
 
 const clamp = (v: number, a = -1, b = 1) => Math.max(a, Math.min(b, v))
 
@@ -67,7 +69,9 @@ export async function startFaceControl(onStatus: (s: FaceStatus) => void) {
         const posY = eyeMidY - 0.5
         // mirror horizontally so it feels like a mirror: you turn/move right -> robot looks right
         const tx = clamp(-(yaw * 2.6 + posX * 2.2))
-        const ty = clamp(-((pitch - 0.9) * 1.4 + posY * 1.6))
+        if (calib.n < 20) { calib.pitch = (calib.pitch * calib.n + pitch) / (calib.n + 1); calib.posY = (calib.posY * calib.n + posY) / (calib.n + 1); calib.n++ }
+        // up/down: much stronger than before, measured relative to the neutral pose
+        const ty = clamp(-((pitch - calib.pitch) * 5 + (posY - calib.posY) * 4))
         faceState.x += (tx - faceState.x) * 0.6
         faceState.y += (ty - faceState.y) * 0.6
         faceState.active = true
@@ -94,4 +98,5 @@ export function stopFaceControl() {
   faceState.active = false
   faceState.x = 0
   faceState.y = 0
-}
+  calib = { n: 0, pitch: 0, posY: 0 }
+                              }
