@@ -30,7 +30,7 @@ function OrbitalCharacter() {
     const px = faceState.active ? faceState.x : pointer.x
     const py = faceState.active ? faceState.y : pointer.y
     group.current.rotation.y = THREE.MathUtils.damp(group.current.rotation.y, px * .7 + Math.sin(t * .28) * .08, speed, delta)
-    group.current.rotation.x = THREE.MathUtils.damp(group.current.rotation.x, -py * .4, speed, delta)
+    group.current.rotation.x = THREE.MathUtils.damp(group.current.rotation.x, -py * .8, speed, delta)
     group.current.position.y = Math.sin(t * .8) * .12
     if (head.current) head.current.rotation.y = THREE.MathUtils.damp(head.current.rotation.y, px * .45, speed + 8, delta)
   })
@@ -89,4 +89,5 @@ export function TechScene() {
     <ambientLight intensity={1.4} /><directionalLight position={[4, 5, 6]} intensity={2.2} /><pointLight position={[-4, 2, 3]} color="#8b5cf6" intensity={12} />
     <PhysicsSpheres /><Environment preset="city" />
   </Canvas></div>
-}
+                       }
+    
